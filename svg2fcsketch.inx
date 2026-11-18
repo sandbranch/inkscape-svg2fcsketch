@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-  <_name>FreeCAD sketch Export v0.8</_name>
-  <id>com.github.jnweiger.inkscape-svg2fcsketch</id>
-  <dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
-  <dependency type="executable" location="extensions">svg2fcsketch.py</dependency>
-  <output>
-    <extension>.fcstd</extension>
-    <mimetype>text/plain</mimetype>
-    <_filetypename>FreeCAD-0.17 sketch (*.fcstd)</_filetypename>
-    <_filetypetooltip>Export path objects to a FreeCAD sketch file</_filetypetooltip>
-    <dataloss>true</dataloss>
-  </output>
-  <param name="tab" type="notebook">
-    <page name="fcstd" _gui-text="Settings ">
-      <param name="expose-internal-geometry" type="boolean" _gui-text="Expose internal geometry" _gui-description="Sitch internal geometry of splines and ellipses to visible when editing.">true</param>
-      <param name="ids" type="string" _gui-text="IDs to export (all if empty):" _gui-description="A comma separated list of IDs to export (Default: everything)"></param>
-      <param name="about_who" type="description">(C) 2018 Jürgen Weigert (juergen@fabmail.org) and contributors.
-  For updates, praise or bug reports please refer to
-  https://github.com/jnweiger/inkscape-svg2fcsketch
-      </param>
-  <!-- CAUTION: Keep in sync with line 3 above and with svg2fcsketch.py ca. line 71 __version__ = ... -->
-      <param name="about_version" type="description">Version 0.8</param>
-    </page>
-  </param>
-  <script>
-      <command reldir="extensions" interpreter="python">svg2fcsketch.py</command>
-  </script>
-</inkscape-extension>
+    <name>FreeCAD sketch</name>
+    <id>com.github.jnweiger.inkscape-svg2fcsketch</id>
+    <dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+    <param name="tab" type="notebook">
+        <page name="options" gui-text="Options">
+            <param name="per_layer" type="bool" gui-text="One sketch per layer" gui-description="Off: everything in one sketch.">true</param>
+            <param name="hv_constraints" type="bool" gui-text="Constrain horizontal and vertical lines">true</param>
+            <param name="expose_internal_geometry" type="bool" gui-text="Show B-spline control points" gui-description="Add the control points of curves as construction circles, as FreeCAD's Show control points does.">false</param>
+            <param name="ids" type="string" gui-text="Only these ids:" gui-description="Comma separated element ids to save; empty for everything."></param>
+        </page>
+        <page name="help" gui-text="Help">
+            <label xml:space="preserve">Saves the drawing as FreeCAD Sketcher sketches, in millimetres, with the lower left corner of the page at the origin. FreeCAD is not needed.
 
+Lines stay lines, Bezier curves become exact B-splines, circular arcs become arcs, circles and ellipses stay circles and ellipses. Segments that meet are joined by coincident constraints. Text: convert it to paths first (Path > Object to Path).
+
+In FreeCAD, recompute once after opening (Ctrl+R).</label>
+        </page>
+    </param>
+    <output>
+        <extension>.FCStd</extension>
+        <mimetype>application/x-extension-fcstd</mimetype>
+        <filetypename>FreeCAD sketch (*.FCStd)</filetypename>
+        <filetypetooltip>FreeCAD Sketcher sketches, one per layer</filetypetooltip>
+        <dataloss>true</dataloss>
+    </output>
+    <script>
+        <command location="inx" interpreter="python">svg2fcsketch.py</command>
+        <helper_extension>org.inkscape.output.svg.inkscape</helper_extension>
+    </script>
+</inkscape-extension>

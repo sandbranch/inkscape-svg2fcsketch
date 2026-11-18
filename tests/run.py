@@ -56,6 +56,8 @@ def convert(svg, out, *args):
             "org.inkscape.Inkscape",
         ]
     else:
+        # native Inkscape keeps inkex in its extensions folder
+        os.environ.setdefault("PYTHONPATH", "/usr/share/inkscape/extensions")
         cmd = [sys.executable]
     subprocess.run(
         [*cmd, os.path.join(REPO, "svg2fcsketch.py"), *args, f"--output={out}", svg],
